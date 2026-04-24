@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .material-symbols-outlined {
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+  }
+}
+
+@layer components {
+  .icon-sm {
+    font-size: 18px !important;
+  }
+  .icon-xs {
+    font-size: 14px !important;
+  }
+
+  /* Horizontal scrollbar softener for tables */
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #c3c6cf;
+    border-radius: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #9fa3ac;
+  }
+}
