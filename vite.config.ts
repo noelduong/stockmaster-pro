@@ -11,6 +11,9 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   plugins: [react()],
   base: process.env.VITE_BASE_PATH || "/stockmaster-pro/",
+  build: {
+    outDir: "docs",
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
