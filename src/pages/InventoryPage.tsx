@@ -185,7 +185,7 @@ export default function InventoryPage() {
   );
 }
 
-function toneFor(
+export function toneFor(
   status: VariantStatus,
 ): "critical" | "warning" | "success" | "neutral" | "primary" {
   if (status === "out") return "critical";
@@ -195,7 +195,7 @@ function toneFor(
   return "neutral";
 }
 
-function labelFor(status: VariantStatus): string {
+export function labelFor(status: VariantStatus): string {
   switch (status) {
     case "low":
       return "Low";

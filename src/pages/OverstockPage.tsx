@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/ui/PageHeader";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { MetricSkeleton, Loader } from "@/components/ui/Loader";
 import { EmptyState } from "@/components/ui/EmptyState";

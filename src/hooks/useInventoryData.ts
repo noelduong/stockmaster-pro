@@ -27,3 +27,11 @@ export function useVariantsByStatus(status: VariantStatus | VariantStatus[]) {
   );
   return { ...rest, data, variants };
 }
+
+export function useIntake() {
+  const q = useInventoryAll();
+  const data = useMemo(() => {
+    return (q.data?.variants || []).filter((v: Variant) => (v.totalIn || 0) > 0);
+  }, [q.data?.variants]);
+  return { ...q, data };
+}

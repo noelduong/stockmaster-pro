@@ -12,18 +12,19 @@ import {
   relativeDays,
 } from "@/lib/format";
 import { useMemo } from "react";
+import type { Variant } from "@/types/inventory";
 
 export default function IntakePage() {
   const intake = useIntake();
-  const items = intake.data || [];
+  const items: Variant[] = intake.data || [];
 
   const stats = useMemo(() => {
-    const totalUnits = items.reduce((s, it) => s + (it.totalIn || 0), 0);
+    const totalUnits = items.reduce((s: number, it: Variant) => s + (it.totalIn || 0), 0);
     const today = new Date().toDateString();
     const todayItems = items.filter(
-      (it) => it.lastInAt && new Date(it.lastInAt).toDateString() === today,
+      (it: Variant) => it.lastInAt && new Date(it.lastInAt).toDateString() === today,
     );
-    const todayUnits = todayItems.reduce((s, it) => s + (it.totalIn || 0), 0);
+    const todayUnits = todayItems.reduce((s: number, it: Variant) => s + (it.totalIn || 0), 0);
     return {
       totalEvents: items.length,
       totalUnits,
@@ -74,7 +75,7 @@ export default function IntakePage() {
                 stats.totalUnits > 0
                   ? formatVND(
                       items.reduce(
-                        (s, it) => s + (it.costPrice || 0) * (it.totalIn || 0),
+                        (s: number, it: Variant) => s + (it.costPrice || 0) * (it.totalIn || 0),
                         0,
                       ) / stats.totalUnits,
                     )
@@ -121,7 +122,7 @@ export default function IntakePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/20">
-                {items.slice(0, 200).map((it) => {
+                {items.slice(0, 200).map((it: Variant) => {
                   const days =
                     it.lastInAt === null
                       ? 999
