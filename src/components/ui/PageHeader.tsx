@@ -8,16 +8,18 @@ interface Props {
 
 export function PageHeader({ title, description, actions }: Props) {
   return (
-    <div className="mb-lg flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+    <div className="flex justify-between items-center mb-6">
       <div>
-        <h1 className="text-3xl font-semibold text-on-surface tracking-tight mb-1">
+        <h2 className="text-2xl font-bold text-slate-900 font-headline-lg">
           {title}
-        </h1>
+        </h2>
         {description && (
-          <p className="text-base text-on-surface-variant">{description}</p>
+          <p className="text-sm text-slate-500 font-label-md mt-1">
+            {description}
+          </p>
         )}
       </div>
-      {actions && <div className="flex items-center gap-3">{actions}</div>}
+      {actions && <div className="flex gap-3">{actions}</div>}
     </div>
   );
 }

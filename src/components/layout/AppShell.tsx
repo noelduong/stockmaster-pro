@@ -25,10 +25,10 @@ export function AppShell() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex">
+    <div className="min-h-screen bg-slate-100 text-slate-900 flex">
       <SideNav />
       <TopNav onRefresh={handleRefresh} refreshing={refreshing} />
-      <main className="ml-64 mt-16 p-lg w-full min-h-[calc(100vh-4rem)] bg-surface">
+      <main className="ml-64 mt-16 p-8 w-full min-h-[calc(100vh-4rem)]">
         <div className="max-w-7xl mx-auto">
           <Outlet />
         </div>

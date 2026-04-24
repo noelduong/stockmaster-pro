@@ -21,31 +21,31 @@ const toneStyles: Record<
   default: {
     iconBg: "bg-surface-container",
     iconText: "text-on-surface-variant",
-    border: "border-outline-variant/50",
+    border: "border-slate-200",
     blob: "bg-surface-container-high",
   },
   error: {
     iconBg: "bg-error-container",
     iconText: "text-error",
-    border: "border-error-container/50",
+    border: "border-slate-200",
     blob: "bg-error-container/40",
   },
   warning: {
     iconBg: "bg-warning-container",
     iconText: "text-[#7a4500]",
-    border: "border-warning-container/60",
+    border: "border-slate-200",
     blob: "bg-warning-container/50",
   },
   success: {
     iconBg: "bg-success-container",
     iconText: "text-success",
-    border: "border-success-container/60",
+    border: "border-slate-200",
     blob: "bg-success-container/40",
   },
   primary: {
     iconBg: "bg-primary-container",
-    iconText: "text-on-primary-container",
-    border: "border-primary-container",
+    iconText: "text-primary",
+    border: "border-slate-200",
     blob: "bg-primary-container/40",
   },
 };
@@ -63,7 +63,7 @@ export function MetricCard({
   return (
     <div
       className={clsx(
-        "bg-surface-container-lowest rounded-xl p-5 border shadow-card flex flex-col justify-between relative overflow-hidden min-h-[140px]",
+        "bg-white p-6 rounded-2xl border shadow-sm flex flex-col justify-between relative overflow-hidden",
         t.border,
       )}
     >
@@ -75,29 +75,25 @@ export function MetricCard({
           )}
         />
       )}
-      <div className="flex items-center justify-between mb-3 relative">
-        <span className="text-xs font-medium text-on-surface-variant uppercase tracking-wide">
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <h3 className="text-sm font-semibold text-slate-500 font-label-md uppercase tracking-wider">
           {label}
-        </span>
-        <div
-          className={clsx(
-            "w-9 h-9 rounded-lg flex items-center justify-center",
-            t.iconBg,
-            t.iconText,
-          )}
-        >
+        </h3>
+        <div className={clsx("p-2 rounded-lg flex items-center justify-center", t.iconBg, t.iconText)}>
           <MaterialIcon name={icon} filled />
         </div>
       </div>
-      <div className="relative">
-        <div className="text-3xl font-semibold text-on-surface tracking-tight">
+      <div className="relative z-10">
+        <div className="text-3xl font-bold text-slate-900 tracking-tight">
           {value}
         </div>
         {hint && (
-          <div className="text-sm text-on-surface-variant mt-1">{hint}</div>
+          <div className="mt-2 text-sm text-slate-500 font-medium">
+            {hint}
+          </div>
         )}
       </div>
-      {children && <div className="mt-3 relative">{children}</div>}
+      {children && <div className="mt-4 relative z-10">{children}</div>}
     </div>
   );
 }

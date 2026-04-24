@@ -27,11 +27,11 @@ export default function DashboardPage() {
     <>
       <PageHeader
         title="Dashboard"
-        description="Tổng quan sức khỏe tồn kho toàn shop."
+        description="Tổng quan sức khỏe tồn kho toàn hệ thống."
         actions={
           <Link
             to="/stock-gaps"
-            className="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-primary hover:text-on-primary transition-colors"
+            className="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-sm flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm"
           >
             <MaterialIcon name="bolt" size={18} />
             Xem Stock Gaps
@@ -39,7 +39,7 @@ export default function DashboardPage() {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter mb-xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
         {q.isLoading ? (
           <>
             <MetricSkeleton />
@@ -86,9 +86,8 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Secondary row: size-gap groups + no-sales */}
       {summary && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <MetricCard
             label="Nhóm gãy size"
             icon="grid_view"
@@ -113,15 +112,15 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-gutter">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Low stock */}
-        <div className="xl:col-span-2 bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden">
-          <div className="p-md border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-low">
+        <div className="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-white">
             <div>
-              <h2 className="text-lg font-semibold text-on-surface">
+              <h2 className="text-lg font-bold text-slate-900 font-headline-md">
                 Sắp hết hàng (coverage ngắn nhất)
               </h2>
-              <p className="text-xs text-on-surface-variant">
+              <p className="text-xs text-slate-500 mt-1">
                 Top 5 SKU cần cân nhắc nhập bổ sung
               </p>
             </div>
@@ -134,86 +133,79 @@ export default function DashboardPage() {
             </Link>
           </div>
           {q.isLoading ? (
-            <div className="p-md text-sm text-on-surface-variant">
-              Đang tải…
-            </div>
+            <div className="p-6 text-sm text-slate-500">Đang tải…</div>
           ) : lowStockTop.length === 0 ? (
-            <div className="p-lg text-sm text-on-surface-variant text-center">
+            <div className="p-8 text-sm text-slate-500 text-center">
               Không có SKU sắp hết 🎉
             </div>
           ) : (
-            <table className="w-full text-left text-sm">
-              <thead className="text-xs text-on-surface-variant uppercase bg-surface">
-                <tr>
-                  <th className="p-md font-medium">Variant</th>
-                  <th className="p-md font-medium">Sản phẩm</th>
-                  <th className="p-md font-medium text-right">Tồn</th>
-                  <th className="p-md font-medium text-right">Coverage</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-outline-variant/20">
-                {lowStockTop.map((v) => (
-                  <tr
-                    key={v.vcode}
-                    className="hover:bg-surface-container-low transition-colors"
-                  >
-                    <td className="p-md font-mono text-xs text-on-surface">
-                      {v.vcode}
-                    </td>
-                    <td className="p-md">
-                      <div className="font-medium text-on-surface truncate max-w-[220px]">
-                        {v.product || "—"}
-                      </div>
-                      <div className="text-xs text-on-surface-variant">
-                        {v.color}
-                        {v.size && ` · ${v.size}`}
-                      </div>
-                    </td>
-                    <td className="p-md text-right font-medium">
-                      {formatNumber(v.stock)}
-                    </td>
-                    <td className="p-md text-right">
-                      <StatusBadge tone="critical">
-                        {v.coverageDays !== null
-                          ? `${v.coverageDays.toFixed(1)}d`
-                          : "—"}
-                      </StatusBadge>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm border-collapse">
+                <thead className="bg-slate-50/50 border-b border-slate-200 text-xs text-slate-600 uppercase tracking-wider">
+                  <tr>
+                    <th className="py-4 px-6 font-semibold">Variant</th>
+                    <th className="py-4 px-6 font-semibold">Sản phẩm</th>
+                    <th className="py-4 px-6 font-semibold text-right">Tồn</th>
+                    <th className="py-4 px-6 font-semibold text-right">Coverage</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {lowStockTop.map((v) => (
+                    <tr key={v.vcode} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="py-4 px-6 font-mono text-xs font-bold text-slate-900">
+                        {v.vcode}
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="font-bold text-slate-900 text-sm truncate max-w-[220px]">
+                          {v.product || "—"}
+                        </div>
+                        <div className="text-xs text-slate-500 mt-0.5">
+                          {v.color}
+                          {v.size && ` · ${v.size}`}
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 text-right font-bold text-slate-900">
+                        {formatNumber(v.stock)}
+                      </td>
+                      <td className="py-4 px-6 text-right">
+                        <StatusBadge tone="critical">
+                          {v.coverageDays !== null ? `${v.coverageDays.toFixed(1)}d` : "—"}
+                        </StatusBadge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
 
         {/* Recent Intake */}
-        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden">
-          <div className="p-md border-b border-outline-variant/30 bg-surface-container-low">
-            <h2 className="text-lg font-semibold text-on-surface">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div className="p-6 border-b border-slate-200 bg-white">
+            <h2 className="text-lg font-bold text-slate-900 font-headline-md">
               Nhập hàng gần đây
             </h2>
-            <p className="text-xs text-on-surface-variant">
+            <p className="text-xs text-slate-500 mt-1">
               5 giao dịch nhập kho mới nhất
             </p>
           </div>
           {q.isLoading ? (
-            <div className="p-md text-sm text-on-surface-variant">
-              Đang tải…
-            </div>
+            <div className="p-6 text-sm text-slate-500">Đang tải…</div>
           ) : recentIntake.length === 0 ? (
-            <div className="p-lg text-sm text-on-surface-variant text-center">
+            <div className="p-8 text-sm text-slate-500 text-center flex-1 flex items-center justify-center">
               Chưa có giao dịch nhập gần đây
             </div>
           ) : (
-            <ul className="divide-y divide-outline-variant/20">
+            <ul className="divide-y divide-slate-100 flex-1">
               {recentIntake.map((it) => (
-                <li key={it.vcode + (it.lastInAt || "")} className="p-md">
+                <li key={it.vcode + (it.lastInAt || "")} className="p-6 hover:bg-slate-50/50 transition-colors">
                   <div className="flex justify-between items-start gap-3">
                     <div className="min-w-0">
-                      <div className="font-medium text-sm text-on-surface truncate">
+                      <div className="font-bold text-sm text-slate-900 truncate">
                         {it.product || it.vcode}
                       </div>
-                      <div className="text-xs text-on-surface-variant font-mono mt-0.5">
+                      <div className="text-xs text-slate-500 font-mono mt-1">
                         {it.vcode}
                       </div>
                     </div>
@@ -221,7 +213,8 @@ export default function DashboardPage() {
                       +{formatNumber(it.totalInWindow || it.totalIn)}
                     </StatusBadge>
                   </div>
-                  <div className="text-xs text-on-surface-variant mt-1">
+                  <div className="text-xs text-slate-400 mt-2 flex items-center gap-1">
+                    <MaterialIcon name="schedule" size={14} />
                     {relativeDays(it.lastInAt)}
                   </div>
                 </li>

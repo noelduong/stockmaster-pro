@@ -1,8 +1,6 @@
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { MetricSkeleton, Loader } from "@/components/ui/Loader";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { MaterialIcon } from "@/components/icons/MaterialIcon";
 import { useIntake } from "@/hooks/useInventoryData";
 import {
@@ -37,15 +35,20 @@ export default function IntakePage() {
     <>
       <PageHeader
         title="Quản lý Nhập hàng"
-        description="Track incoming inventory and intake events."
+        description="Theo dõi tiến độ nhận hàng và quản lý các đơn hàng nhập (Intake/PO)."
         actions={
-          <button className="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 hover:bg-primary hover:text-on-primary transition-colors">
-            <MaterialIcon name="add" size={18} /> New Intake
-          </button>
+          <>
+            <button className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg font-label-md text-sm hover:bg-slate-50 transition-colors shadow-sm flex items-center gap-2">
+              <MaterialIcon name="filter_list" size={18} /> Lọc đơn
+            </button>
+            <button className="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-sm hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2">
+              <MaterialIcon name="add" size={18} /> Tạo đơn nhập
+            </button>
+          </>
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {intake.isLoading ? (
           <>
             <MetricSkeleton />
@@ -55,21 +58,21 @@ export default function IntakePage() {
         ) : (
           <>
             <MetricCard
-              label="Total Intake Events"
+              label="SKU đã nhập"
               icon="local_shipping"
               value={formatNumber(stats.totalEvents)}
-              hint={`${formatNumber(stats.totalUnits)} units total`}
+              hint={`Tổng cộng ${formatNumber(stats.totalUnits)} sản phẩm`}
               tone="primary"
             />
             <MetricCard
-              label="Intake Today"
+              label="Nhập trong hôm nay"
               icon="event_available"
               value={formatNumber(stats.todayEvents)}
-              hint={`${formatNumber(stats.todayUnits)} units received`}
+              hint={`${formatNumber(stats.todayUnits)} sản phẩm nhận hôm nay`}
               tone="success"
             />
             <MetricCard
-              label="Avg Cost/Unit"
+              label="Giá trị vốn trung bình"
               icon="payments"
               value={
                 stats.totalUnits > 0
@@ -81,115 +84,82 @@ export default function IntakePage() {
                     )
                   : "—"
               }
-              hint="Weighted by intake qty"
+              hint="Bình quân gia quyền theo SL nhập"
               tone="default"
             />
           </>
         )}
       </div>
 
-      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden">
-        <div className="p-md border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-low">
-          <h2 className="text-lg font-semibold text-on-surface">
-            Recent Intake Events
+      {/* Filters (Mock) */}
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-thin">
+        <button className="px-4 py-2 bg-primary-container text-primary border border-primary-container rounded-full font-label-md text-sm whitespace-nowrap transition-colors">
+          Tất cả SKU nhập
+        </button>
+        <button className="px-4 py-2 bg-white text-slate-600 border border-slate-200 rounded-full font-label-md text-sm hover:bg-slate-50 transition-colors whitespace-nowrap">
+          Đang giao
+        </button>
+        <button className="px-4 py-2 bg-white text-slate-600 border border-slate-200 rounded-full font-label-md text-sm hover:bg-slate-50 transition-colors whitespace-nowrap">
+          Đã hoàn thành
+        </button>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-white">
+          <h2 className="text-lg font-bold text-slate-900 font-headline-md">
+            Lịch sử SKU nhập hàng
           </h2>
-          <div className="flex gap-2">
-            <button className="p-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors">
-              <MaterialIcon name="filter_list" size={18} />
-            </button>
+          <div className="relative w-64">
+             <MaterialIcon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+             <input type="text" placeholder="Tìm kiếm SKU..." className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" />
           </div>
         </div>
 
         {intake.isLoading ? (
           <Loader />
         ) : items.length === 0 ? (
-          <EmptyState
-            icon="inbox"
-            title="No intake events yet"
-            description="Intake events will show up here once recorded in the sheet."
-          />
+          <div className="text-center p-8 text-slate-500">Chưa có dữ liệu nhập hàng.</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-surface text-xs text-on-surface-variant uppercase">
-                <tr>
-                  <th className="p-md font-medium">Variant</th>
-                  <th className="p-md font-medium">Product</th>
-                  <th className="p-md font-medium">Last In</th>
-                  <th className="p-md font-medium text-right">Units In</th>
-                  <th className="p-md font-medium text-right">Cost Value</th>
-                  <th className="p-md font-medium text-center">Status</th>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50/50 border-b border-slate-200">
+                  <th className="py-4 px-6 font-semibold text-slate-600 text-sm">Variant / Lần nhập cuối</th>
+                  <th className="py-4 px-6 font-semibold text-slate-600 text-sm">Sản phẩm</th>
+                  <th className="py-4 px-6 font-semibold text-slate-600 text-sm text-right">Tổng SL Nhập</th>
+                  <th className="py-4 px-6 font-semibold text-slate-600 text-sm text-right">Tổng Vốn</th>
+                  <th className="py-4 px-6 font-semibold text-slate-600 text-sm text-center">Hành động</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-outline-variant/20">
-                {items.slice(0, 200).map((it: Variant) => {
-                  const days =
-                    it.lastInAt === null
-                      ? 999
-                      : Math.floor(
-                          (Date.now() - new Date(it.lastInAt).getTime()) /
-                            (1000 * 60 * 60 * 24),
-                        );
-                  const tone =
-                    days <= 1 ? "success" : days <= 7 ? "primary" : "neutral";
-                  return (
-                    <tr
-                      key={it.vcode + (it.lastInAt || "")}
-                      className="hover:bg-surface-container-low transition-colors"
-                    >
-                      <td className="p-md">
-                        <div className="font-mono text-xs text-on-surface">
-                          {it.vcode}
-                        </div>
-                        <div className="text-xs text-on-surface-variant mt-0.5">
-                          {it.color}
-                          {it.size && ` · ${it.size}`}
-                        </div>
-                      </td>
-                      <td className="p-md">
-                        <div className="font-medium text-on-surface truncate max-w-[240px]">
-                          {it.product || "—"}
-                        </div>
-                        <div className="text-xs text-on-surface-variant">
-                          {it.pcode}
-                        </div>
-                      </td>
-                      <td className="p-md">
-                        <div className="text-sm text-on-surface">
-                          {formatDateTime(it.lastInAt)}
-                        </div>
-                        <div className="text-xs text-on-surface-variant">
-                          {relativeDays(it.lastInAt)}
-                        </div>
-                      </td>
-                      <td className="p-md text-right font-medium text-on-surface">
-                        +{formatNumber(it.totalIn)}
-                      </td>
-                      <td className="p-md text-right text-on-surface-variant">
-                        {formatVND((it.costPrice || 0) * (it.totalIn || 0))}
-                      </td>
-                      <td className="p-md text-center">
-                        <StatusBadge tone={tone} icon="check_circle">
-                          {days === 0
-                            ? "Today"
-                            : days === 1
-                              ? "Yesterday"
-                              : days < 999
-                                ? `${days}d ago`
-                                : "—"}
-                        </StatusBadge>
-                      </td>
-                    </tr>
-                  );
-                })}
+              <tbody className="divide-y divide-slate-100">
+                {items.slice(0, 100).map((it: Variant) => (
+                  <tr key={it.vcode + (it.lastInAt || "")} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="py-4 px-6">
+                      <div className="font-bold text-slate-900 text-sm font-mono">{it.vcode}</div>
+                      <div className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                        <MaterialIcon name="calendar_today" size={14} />
+                        {it.lastInAt ? formatDateTime(it.lastInAt) : "—"}
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="font-bold text-slate-900 text-sm max-w-[200px] truncate">{it.product || "—"}</div>
+                      <div className="text-xs text-slate-500 mt-0.5">{it.pcode} · {it.color} {it.size}</div>
+                    </td>
+                    <td className="py-4 px-6 text-right font-bold text-slate-900">
+                      +{formatNumber(it.totalIn)}
+                    </td>
+                    <td className="py-4 px-6 text-right text-slate-600 font-medium">
+                      {formatVND((it.costPrice || 0) * (it.totalIn || 0))}
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <button className="p-2 text-primary hover:bg-primary-container rounded-lg transition-colors">
+                         <MaterialIcon name="visibility" size={20} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-          </div>
-        )}
-
-        {items.length > 200 && (
-          <div className="p-sm border-t border-outline-variant/30 text-center text-xs text-on-surface-variant bg-surface-container-low">
-            Showing first 200 of {items.length} intake events
           </div>
         )}
       </div>

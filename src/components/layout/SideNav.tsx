@@ -5,81 +5,86 @@ import { APP_META } from "@/lib/config";
 
 const items = [
   { to: "/", icon: "dashboard", label: "Dashboard" },
-  { to: "/inventory", icon: "inventory_2", label: "Inventory" },
-  { to: "/stock-gaps", icon: "warning", label: "Stock Gaps" },
-  { to: "/overstock", icon: "hourglass_bottom", label: "Overstock" },
-  { to: "/intake", icon: "input", label: "Intake Plans" },
-  { to: "/reports", icon: "analytics", label: "Reports" },
+  { to: "/inventory", icon: "inventory_2", label: "Tồn kho" },
+  { to: "/stock-gaps", icon: "warning", label: "Gãy size" },
+  { to: "/overstock", icon: "hourglass_bottom", label: "Tồn lâu" },
+  { to: "/intake", icon: "input", label: "Nhập hàng" },
+  { to: "/reports", icon: "analytics", label: "Báo cáo" },
 ];
 
 const footerItems = [
-  { to: "/settings", icon: "settings", label: "Settings" },
-  { to: "/support", icon: "help", label: "Support" },
+  { to: "/settings", icon: "settings", label: "Cài đặt" },
+  { to: "/support", icon: "help", label: "Hỗ trợ" },
 ];
 
 export function SideNav() {
   return (
-    <nav className="h-screen w-64 border-r fixed left-0 top-0 bg-surface-container-lowest border-outline-variant flex flex-col py-6 px-4 z-50">
-      <div className="flex items-center gap-3 mb-8 px-2">
-        <div className="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
-          <MaterialIcon name="inventory_2" filled />
+    <nav className="h-screen w-64 border-r fixed left-0 top-0 border-slate-200 bg-white flex flex-col py-6 px-4 z-50">
+      <div className="flex items-center gap-3 px-2 mb-8">
+        <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary font-bold text-sm shadow-sm">
+          S
         </div>
         <div>
-          <h1 className="text-base font-semibold text-on-surface leading-tight">
+          <h1 className="text-base font-bold text-slate-900 leading-none">
             {APP_META.name}
           </h1>
-          <p className="text-xs text-on-surface-variant mt-0.5">
+          <p className="text-[11px] text-slate-400 font-medium mt-0.5">
             {APP_META.tagline}
           </p>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col gap-1">
+      <ul className="flex-1 space-y-1">
         {items.map((it) => (
-          <NavLink
-            key={it.to}
-            to={it.to}
-            end={it.to === "/"}
-            className={({ isActive }) =>
-              clsx(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-sm transition-colors duration-200",
-                isActive
-                  ? "bg-primary-container text-on-primary-container border-r-4 border-primary font-semibold"
-                  : "text-on-surface-variant hover:bg-surface-container",
-              )
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <MaterialIcon name={it.icon} filled={isActive} />
-                <span>{it.label}</span>
-              </>
-            )}
-          </NavLink>
+          <li key={it.to}>
+            <NavLink
+              to={it.to}
+              end={it.to === "/"}
+              className={({ isActive }) =>
+                clsx(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200",
+                  isActive
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900 font-medium",
+                )
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <MaterialIcon name={it.icon} filled={isActive} size={20} />
+                  <span>{it.label}</span>
+                </>
+              )}
+            </NavLink>
+          </li>
         ))}
-      </div>
+      </ul>
 
-      <div className="mt-auto pt-4 border-t border-outline-variant flex flex-col gap-1">
-        {footerItems.map((it) => (
-          <NavLink
-            key={it.to}
-            to={it.to}
-            className={({ isActive }) =>
-              clsx(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-sm transition-colors",
-                isActive
-                  ? "bg-primary-container text-on-primary-container"
-                  : "text-on-surface-variant hover:bg-surface-container",
-              )
-            }
-          >
-            <MaterialIcon name={it.icon} />
-            <span>{it.label}</span>
-          </NavLink>
-        ))}
-        <button className="mt-3 w-full bg-primary-container text-on-primary-container py-2 rounded-lg font-medium text-sm hover:bg-primary hover:text-on-primary transition-colors">
-          Generate Report
+      <div className="mt-auto space-y-3">
+        <button className="w-full py-2.5 px-4 bg-primary text-on-primary rounded-xl font-medium text-sm hover:opacity-90 transition-opacity shadow-sm flex items-center justify-center gap-2">
+          <MaterialIcon name="description" size={18} />
+          Tạo báo cáo
         </button>
+        <ul className="space-y-1 border-t border-slate-100 pt-3">
+          {footerItems.map((it) => (
+            <li key={it.to}>
+              <NavLink
+                to={it.to}
+                className={({ isActive }) =>
+                  clsx(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200",
+                    isActive
+                      ? "bg-primary/10 text-primary font-semibold"
+                      : "text-slate-400 hover:bg-slate-50 hover:text-slate-700 font-medium",
+                  )
+                }
+              >
+                <MaterialIcon name={it.icon} size={20} />
+                <span>{it.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
     </nav>
   );
